@@ -20,7 +20,7 @@ let estimatedAge = null;
 // --- 2. AI 모델 로딩 ---
 async function loadModels() {
   console.log('AI 모델 로딩 시작...');
-  const MODEL_URL = '/models'; 
+  const MODEL_URL = `${import.meta.env.BASE_URL}models`;
   try {
     await Promise.all([
       faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
