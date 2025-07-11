@@ -3,7 +3,7 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   // 저장소 이름으로 설정
-  base: '/aiface/', 
+//   base: '/aiface/', 
   
   // ✅ 이 부분을 추가합니다.
   // public 폴더를 빌드 결과물에 포함시키도록 명시합니다.
