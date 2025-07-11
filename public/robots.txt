@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aiface.pages.dev/sitemap.xml
