@@ -37,33 +37,44 @@ async function loadModels() {
 
 // --- 3. 얼굴 분석 실행 ---
 async function analyzeFace() {
+  // 1. 이전 결과 지우고 로딩 화면 표시
   resetResultUI();
   showLoader();
   console.log('얼굴 분석을 시작합니다...');
   
+  // 2. AI를 사용해 얼굴 분석 실행 (완료될 때까지 기다림)
   const detections = await faceapi.detectSingleFace(imagePreview).withAgeAndGender();
   
-  hideLoader();
+  // 3. 0.5초 딜레이를 주어 로딩 화면이 사라진 후 결과를 표시
+  setTimeout(() => {
+    // 3-1. 로딩 화면 숨기기
+    loader.classList.add('hidden'); 
 
-  if (detections) {
-    console.log('분석 결과:', detections);
-    estimatedAge = Math.round(detections.age);
-    
-    // ✅ 결과 표시 로직 수정
-    resultImage.src = imagePreview.src; // 결과 이미지에 사진 설정
-    estimatedAgeEl.textContent = estimatedAge;
+    // 3-2. 분석 결과에 따라 화면 처리
+    if (detections) {
+      // 얼굴 분석에 성공한 경우
+      console.log('분석 결과:', detections);
+      estimatedAge = Math.round(detections.age);
+      
+      // 결과 화면에 이미지와 나이 표시
+      resultImage.src = imagePreview.src; 
+      estimatedAgeEl.textContent = estimatedAge;
 
-    uploadContainer.classList.add('hidden');
-    resultContainer.classList.remove('hidden');
-    
-    downloadBtn.disabled = false;
-    shareBtn.disabled = false;
-    drawMemeCard();
-  } else {
-    console.log('얼굴을 찾지 못했습니다.');
-    alert('얼굴을 인식할 수 없습니다. 더 선명한 정면 사진으로 다시 시도해주세요.');
-    resetUploadUI();
-  }
+      // 업로드 창은 숨기고 결과 창을 보여줌
+      uploadContainer.classList.add('hidden');
+      resultContainer.classList.remove('hidden');
+      
+      // 버튼 활성화 및 결과 카드 생성
+      downloadBtn.disabled = false;
+      shareBtn.disabled = false;
+      drawMemeCard();
+    } else {
+      // 얼굴 분석에 실패한 경우
+      console.log('얼굴을 찾지 못했습니다.');
+      alert('얼굴을 인식할 수 없습니다. 더 선명한 정면 사진으로 다시 시도해주세요.');
+      resetUploadUI();
+    }
+  }, 500); // 0.5초(500ms) 지연
 }
 
 // --- 4. 파일 처리 및 UI 제어 ---
